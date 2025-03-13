@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { ACCESS_TOKEN } from "./server/constants";
+import { ACCESS_TOKEN } from "./constants";
 import { validateAccessToken } from "./server/service";
 
 export async function getCurrent() {

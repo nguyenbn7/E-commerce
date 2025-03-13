@@ -55,27 +55,10 @@ export async function createSuperuser(
     .executeTakeFirst();
 }
 
-export async function getUserByUsername(username: string) {
+async function getUserByUsername(username: string) {
   return db
     .selectFrom("user as u")
     .where("u.username", "=", normalizeUsername(username))
-    .select([
-      "u.id",
-      "u.username",
-      "u.name",
-      "u.password",
-      "u.is_active as isActive",
-      "u.is_superuser as isSuperuser",
-      "u.is_staff as isStaff",
-      "u.created_at as createdAt",
-    ])
-    .executeTakeFirst();
-}
-
-export async function getUserById(id: number) {
-  return db
-    .selectFrom("user as u")
-    .where("u.id", "=", id)
     .select([
       "u.id",
       "u.username",

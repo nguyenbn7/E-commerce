@@ -5,5 +5,5 @@ export default async function Home() {
   const user = await getCurrent();
   if (!user) redirect("/sign-in");
 
-  return <div>Dashboard</div>;
+  return <div>Dashboard </div>;
 }
