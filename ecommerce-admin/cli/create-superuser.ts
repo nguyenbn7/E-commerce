@@ -2,42 +2,51 @@ import readline from "node:readline";
 import MuteStream from "mute-stream";
 import { createSuperuser } from "@/features/auth/server/user-manager.server";
 
-const ms = new MuteStream({
-  replace: "*",
-});
-
-ms.pipe(process.stdout);
-
-// Create an interface for input and output
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: ms,
-  terminal: true,
-});
-
-const askQuestion = (question: string) => {
-  return new Promise((resolve) => {
-    rl.question(question, (answer) => {
-      resolve(answer);
-    });
+function askQuestion(question: string) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: true,
   });
-};
 
-const askPassword = (question: string) => {
+  return new Promise((resolve) =>
+    rl.question(question, (answer) => {
+      rl.close();
+      resolve(answer);
+    })
+  );
+}
+
+function askPassword(
+  question: string,
+  options: Pick<MuteStream.Options, "replace"> = { replace: "*" }
+) {
+  const ms = new MuteStream({
+    replace: options.replace,
+  });
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: ms,
+    terminal: true,
+  });
+
+  ms.pipe(process.stdout);
+
   rl.setPrompt(question);
   rl.prompt();
 
   ms.mute();
 
-  return new Promise((resolve) => {
+  return new Promise((resolve) =>
     rl.on("line", (answer) => {
-      resolve(answer);
       ms.unmute();
-    });
-  });
-};
+      rl.close();
+      resolve(answer);
+    })
+  );
+}
 
-// Main async function
 const main = async () => {
   const username = (await askQuestion("Username: ")) as string;
   const name = (await askQuestion("Name: ")) as string;
@@ -45,15 +54,14 @@ const main = async () => {
   const password = (await askPassword("Password: ")) as string;
 
   try {
-    await createSuperuser({ username, name }, password);
-    console.log("Create user successfully");
+    const user = await createSuperuser({ username, name }, password);
+
+    if (!user) throw new Error("Can not create super user");
+
+    console.log("Create super user successfully");
   } catch (error) {
     console.error(error);
-  } finally {
-    rl.close();
-    return;
   }
 };
 
-// Call the main async function
 main();

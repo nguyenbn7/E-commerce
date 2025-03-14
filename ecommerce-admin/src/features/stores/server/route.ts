@@ -13,16 +13,19 @@ const app = new Hono().post(
     const { name } = c.req.valid("json");
     const user = c.get("user");
 
-    await db
+    const store = await db
       .insertInto("store")
       .values({
         name,
         user_id: user.id,
         updated_at: sql`CURRENT_TIMESTAMP`, // TODO: remove this
       })
-      .execute();
+      .returning(["id"])
+      .executeTakeFirst();
 
-    return c.json({});
+    if (!store) return c.json({ error: "Can not create store" }, 400);
+
+    return c.json({ data: store });
   }
 );
 

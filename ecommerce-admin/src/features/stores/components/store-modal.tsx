@@ -1,7 +1,9 @@
+"use client";
+
 import { setupSchema, type SetupSchema } from "../schemas";
 import Modal from "@/components/modal";
 import { useStoreModal } from "../hooks/use-store-modal";
-import { useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -28,7 +30,7 @@ export default function StoreModal() {
 
   const { mutate, isPending } = useCreateStore();
 
-  const onSubmit = async (values: SetupSchema) => {
+  const onSubmit: SubmitHandler<SetupSchema> = async (values, $event) => {
     mutate(values);
   };
 
