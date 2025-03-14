@@ -13,6 +13,7 @@ interface ModalProps {
   description: string;
   isOpen: boolean;
   onClose: () => void;
+  modal?: boolean;
   children?: React.ReactNode;
 }
 
@@ -21,6 +22,7 @@ export default function Modal({
   description,
   isOpen,
   onClose,
+  modal = false,
   children,
 }: ModalProps) {
   const onChange = (open: boolean) => {
@@ -28,7 +30,7 @@ export default function Modal({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onChange} modal={false}>
+    <Dialog open={isOpen} onOpenChange={onChange} modal={modal}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
