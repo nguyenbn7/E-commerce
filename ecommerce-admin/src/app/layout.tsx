@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import QueryProviders from "./query-providers";
+import ModalProvider from "@/features/stores/providers/modal-providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +23,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // TODO: change theme base on flag for Toast
   return (
     <html lang="en">
       <body
@@ -29,7 +32,11 @@ export default function RootLayout({
           "antialiased md:subpixel-antialiased min-h-screen bg-gray-50 dark:bg-gray-900"
         )}
       >
-        <QueryProviders>{children}</QueryProviders>
+        <Toaster richColors theme="light" />
+        <QueryProviders>
+          <ModalProvider />
+          {children}
+        </QueryProviders>
       </body>
     </html>
   );

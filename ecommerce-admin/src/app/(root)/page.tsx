@@ -1,13 +1,16 @@
-"use client";
+import type { Metadata } from "next";
+import { getCurrent } from "@/features/auth/actions";
+import SetupPrompt from "@/features/stores/components/setup-prompt";
+import { redirect } from "next/navigation";
 
-import Modal from "@/components/modal";
+export const metadata: Metadata = {
+  title: "Setup",
+};
 
-export default function SetupPage() {
-  return (
-    <div className="p-4">
-      <Modal title="Test" description="Test Desc" isOpen onClose={() => {}}>
-        Children
-      </Modal>
-    </div>
-  );
+export default async function SetupPage() {
+  const user = await getCurrent();
+
+  if (!user) redirect("/sign-in");
+  
+  return <SetupPrompt />;
 }
