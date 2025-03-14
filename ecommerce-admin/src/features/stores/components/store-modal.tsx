@@ -63,6 +63,7 @@ export default function StoreModal() {
             />
             <div className="pt-6 space-x-2 flex items-center justify-end w-full">
               <Button
+                type="button"
                 variant="outline"
                 onClick={storeModal.onClose}
                 disabled={isPending}

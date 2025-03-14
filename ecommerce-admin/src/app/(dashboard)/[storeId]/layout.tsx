@@ -1,3 +1,4 @@
+import Navbar from "@/components/navbar";
 import { getCurrent } from "@/features/auth/actions";
 import { storeIdSchema } from "@/features/stores/schemas";
 import { db } from "@/lib/db";
@@ -30,5 +31,10 @@ export default async function DashboardLayout({
 
   if (!store) redirect("/");
 
-  return <>{children}</>;
+  return (
+    <>
+      <Navbar />
+      {children}
+    </>
+  );
 }
